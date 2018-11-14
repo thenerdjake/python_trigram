@@ -12,14 +12,21 @@ def CreatTriDictionary(Corpus, Storage):
     thisdic2 = {}
     finaldic = {}
     prevdic = {}
+    print("test")
     thislistfinalnum = []
     fptr = open(CorpusName)
     raw = fptr.read()
+
+
+
     words = nltk.word_tokenize(raw)
     finder = nltk.collocations.TrigramCollocationFinder.from_words(words)
     #finder.apply_freq_filter(1)
     finder.apply_word_filter(lambda w: w in ('I', 'me', '#', '?', ',', ':', '<', '>', '@'))
     trigrams =finder.ngram_fd.items()
+
+
+    
     for i, j in trigrams:
         thislist1.append(i[0])
         thislist2.append(i[1])
@@ -44,8 +51,7 @@ def CreatTriDictionary(Corpus, Storage):
 
 
 
-def GetNextWord(secondlastword, lastword):
-    dictionary = pickle.load( open( Storage, "rb" ) )
+def GetNextWord(dictionary, secondlastword, lastword):
     list = []
     rand = random.uniform(0,1)
     for key in dictionary:
@@ -73,20 +79,21 @@ def main():
         print("needs an arguement")
         exit()
 
-    if (argv[1] == '0'):
+    if (sys.argv[1] == '0'):
         CreatTriDictionary(CorpusName, StorageName)
         exit()
 
-    if(argv[1] == '1'):
+    if(sys.argv[1] == '1'):
+        pckledictionary = pickle.load( open( StorageName, "rb" ) )
         arguement2 = sys.argv[1]
         arguement3 = sys.argv[2]
-        arguement4 = GetNextWord(sys.argv[1], sys.argv[2])
+        arguement4 = GetNextWord(pckledictionary, sys.argv[1], sys.argv[2])
         #
         i = 0
         while(i<30):
             arguement2 = arguement3
             arguement3 = arguement4
-            arguement4 = function(arguement2, arguement3)
+            arguement4 = GetNextWord(pckledictionary, arguement2, arguement3)
             if arguement4 == '.':
                 print(arguement4)
                 break;
